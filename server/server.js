@@ -8,11 +8,11 @@ let cartItems = items;
 server.use(morgan('combined'));
 
 server.get("/", (req, res) => {
-  res.send('OK');
+  res.send('OK\n');
 });
 
 server.get("/ping", (req, res) => {
-  res.send('pong');
+  res.send('pong\n');
 });
 
 server.get("/items", (req, res) => {
@@ -32,7 +32,7 @@ server.get("/locale", (req, res) => {
 });
 
 server.use(function (req, res) {
-  res.status(404).send("Sorry can't find that!")
+  res.status(404).send("Sorry can't find that!\n")
 });
 
 server.listen(3000, () => {

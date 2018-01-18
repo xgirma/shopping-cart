@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.17.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "jest": "^22.1.1",
@@ -14,9 +15,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "./node_modules/.bin/jest",
     "eject": "react-scripts eject",
-    "serve": "npx babel server -d dist --presets es2015,stage-2 && "
+    "serve": "npx babel server -d dist --presets es2015,stage-2 && node dist/server.js"
   },
   "jest": {
     "transform": {

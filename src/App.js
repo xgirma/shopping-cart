@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
+import LocalizationBox from './components/LocalizationBox';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <p>
-          Here you go ...
-        </p>
+        <LocalizationBox {...this.props}/>
       </div>
     );
   }

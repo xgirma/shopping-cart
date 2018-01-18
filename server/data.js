@@ -1,28 +1,28 @@
 const items = [{
-  id:"401",
-  name:"Box",
-  description:"It's just an ordinary box, or is it?",
-  priceUSD:34.95
-},{
-  id:"402",
-  name:"Camera",
-  description:"This small, lightweight camera can hold over 1000 high definition images.",
-  priceUSD:155.95
-},{
-  id:"403",
-  name:"Magazine",
-  description:"One can't help but be distracted by this magazine.",
-  priceUSD:9
+  id: "401",
+  name: "Box",
+  description: "It's just an ordinary box, or is it?",
+  priceUSD: 34.95
+}, {
+  id: "402",
+  name: "Camera",
+  description: "This small, lightweight camera can hold over 1000 high definition images.",
+  priceUSD: 155.95
+}, {
+  id: "403",
+  name: "Magazine",
+  description: "One can't help but be distracted by this magazine.",
+  priceUSD: 9
 }];
 
 const conversions = {
-  USDtoCAD:1.5,
-  USDtoGBP:0.9
+  USDtoCAD: 1.5,
+  USDtoGBP: 0.9
 };
 
 
 const locale = {
-  country:"USA"
+  country: "USA"
 };
 
-export { items, conversions, locale } ;
+export {items, conversions, locale} ;
