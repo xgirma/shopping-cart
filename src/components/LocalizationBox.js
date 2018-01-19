@@ -27,6 +27,11 @@ class LocalizationBox extends React.Component {
   };
 
   render() {
+    const length = this.state.items.length;
+    console.log('length', length);
+    console.log('state', this.state.items.length);
+    console.log('state', this.state.items);
+    console.log('state', this.state);
     return (
       <div>
         <form className="locale-form">
@@ -39,7 +44,7 @@ class LocalizationBox extends React.Component {
             <option value="BE">Belgium</option>
           </select>
         </form>
-        <h3>Your Cart ({this.state.items.length})</h3>
+        <h3>Your Cart ({length})</h3>
         <CartItemList {...this.state} onRemove={this.removeItem} onReset={this.resetItems}/>
         <TotalBox {...this.state}/>
       </div>
