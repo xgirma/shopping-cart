@@ -1,5 +1,6 @@
 const sum = ([...args]) => {
-  return args.reduce((a, c) => a + c);
+  console.log(arguments);
+  return args.reduce((a, c) => { return a + c }, 0);
 };
 
 export default sum;
