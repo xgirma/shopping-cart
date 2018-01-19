@@ -154,17 +154,198 @@ it('renders without crashing', () => {
 ```
 
 Test After: 
-```javascript
+```diff
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import getInitialState from "./initial-state";
++ import getInitialState from "./initial-state";
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<App items={getInitialState()} locale={{country: "US"}} />, div);
+-  ReactDOM.render(<App />, div);
++  ReactDOM.render(<App items={getInitialState()} locale={{country: "US"}} />, div);
   ReactDOM.unmountComponentAtNode(div);
 });
 ```
 
 <img width="1624" alt="screen shot 2018-01-19 at 1 12 57 am" src="https://user-images.githubusercontent.com/5876481/35143274-f58e8e92-fcb5-11e7-8270-470a7fe935a5.png">
+
+> "Testing leads to failure, and failure leads to understanding."
+
+Issue [4] Invariant Violation: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: object.
+          
+<img width="1623" alt="screen shot 2018-01-19 at 2 17 34 am" src="https://user-images.githubusercontent.com/5876481/35146183-0ed1598a-fcbf-11e7-9f14-c262a21f9a84.png">
+
+Test
+```javascript
+jest.dontMock('./../../../src/components/CartItem');
+import ReactTestUtils from 'react-dom/test-utils';
+import React from 'react';
+
+describe('the cart item module', () => {
+  describe('the name display of the item', () => {
+    it('should display the name of the item', () => {
+      const CartItem = require('./../../../src/components/CartItem');
+      const item = {
+          id: 3,
+          name: "Instant Noodles",
+          description: "not bad.",
+          price: 20
+      };
+
+      const cartItem = ReactTestUtils.renderIntoDocument(
+        <CartItem item={item}/>
+      );
+    });
+  });
+});
+```
+After: [stackoverflow](https://stackoverflow.com/questions/34130539/uncaught-error-invariant-violation-element-type-is-invalid-expected-a-string)
+```diff
+jest.dontMock('./../../../src/components/CartItem');
+import ReactTestUtils from 'react-dom/test-utils';
+import React from 'react';
+
+describe('the cart item module', () => {
+  describe('the name display of the item', () => {
+    it('should display the name of the item', () => {
+-      const CartItem = require('./../../../src/components/CartItem');    
++      import CartItem from './../../../src/components/CartItem';
+      const item = {
+          id: 3,
+          name: "Instant Noodles",
+          description: "not bad.",
+          price: 20
+      };
+
+      const cartItem = ReactTestUtils.renderIntoDocument(
+        <CartItem item={item}/>
+      );
+    });
+  });
+});
+```
+<img width="1624" alt="screen shot 2018-01-19 at 2 21 17 am" src="https://user-images.githubusercontent.com/5876481/35146316-7c331dec-fcbf-11e7-9196-a3df6d86239a.png">
+
+```diff
+jest.dontMock('./../../../src/components/CartItem');
+import ReactTestUtils from 'react-dom/test-utils';
+import React from 'react';
+
++ import CartItem from './../../../src/components/CartItem';
+
+describe('the cart item module', () => {
+  describe('the name display of the item', () => {
+    it('should display the name of the item', () => {
++   import CartItem from './../../../src/components/CartItem';
+      const item = {
+          id: 3,
+          name: "Instant Noodles",
+          description: "not bad.",
+          price: 20
+      };
+
+      const cartItem = ReactTestUtils.renderIntoDocument(
+        <CartItem item={item}/>
+      );
+    });
+  });
+});
+```
+
+<img width="1627" alt="screen shot 2018-01-19 at 2 23 59 am" src="https://user-images.githubusercontent.com/5876481/35146435-db7921e8-fcbf-11e7-9f59-9a637e89d513.png">
+
+Component: 
+```javascript
+import React from 'react';
+import { toLocaleCurrencyString } from '../lib/conversion-helper';
+
+class CartItem extends React.Component {
+  getLocalizedCurrencySymbol = (price, country) => {
+    return toLocaleCurrencyString(price, country);
+  };
+  
+  render() {
+    const {name, price, description} = this.props.item;
+    const {country} = this.props.locale;
+    const {onRemove} = this.props;
+
+    return (
+      <section>
+        <h4>{name}</h4>
+        <p>
+          Your price: {" "}
+          <span>{this.getLocalizedCurrencySymbol(price, country)}</span>
+        </p>
+        <p>{description}</p>
+        <button onClick={() => onRemove(this.props.item)}>
+          Remove this item from the cart
+        </button>
+      </section>
+    )
+  }
+}
+
+export default CartItem;
+```
+Test
+```diff
+jest.dontMock('./../../../src/components/CartItem');
+import ReactTestUtils from 'react-dom/test-utils';
+import React from 'react';
+
+import CartItem from './../../../src/components/CartItem';
+
+describe('the cart item module', () => {
+  describe('the name display of the item', () => {
+    it('should display the name of the item', () => {
+
+      const item = {
+          id: 3,
+          name: "Instant Noodles",
+          description: "not bad.",
+          price: 20
+      };
+
++      const locale = { country: "BE" };
+
+      const cartItem = ReactTestUtils.renderIntoDocument(
+-        <CartItem item={item}/>
++        <CartItem item={item}  locale={locale}/>
+      );
+    });
+  });
+});
+```
+
+```javascript
+jest.dontMock('./../../../src/components/CartItem');
+import ReactTestUtils from 'react-dom/test-utils';
+import React from 'react';
+
+import CartItem from './../../../src/components/CartItem';
+
+describe('the cart item module', () => {
+  describe('the name display of the item', () => {
+    it('should display the name of the item', () => {
+
+      const item = {
+          id: 3,
+          name: "Instant Noodles",
+          description: "not bad.",
+          price: 20
+      };
+
+      const locale = { country: "BE" };
+
+      const cartItem = ReactTestUtils.renderIntoDocument(
+        <CartItem item={item}  locale={locale}/>
+      );
+
+      let label = ReactTestUtils.findRenderedDOMComponentWithTag(cartItem, 'h4');
+      expect(label.textContent).toEqual(item.name);
+    });
+  });
+});
+```
+Test: :white_check_mark: 

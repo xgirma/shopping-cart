@@ -30,7 +30,10 @@
       "^.+\\.jsx?$": "babel-jest"
     },
     "collectCoverage": true,
-    "verbose": true
+    "verbose": true,
+    "unmockedModulePathPatterns": [
+      "react"
+    ]
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
